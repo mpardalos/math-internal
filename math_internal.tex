@@ -1,0 +1,260 @@
+\documentclass[12pt, titlepage]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage[all]{nowidow}
+\usepackage[
+    citestyle=authortitle,
+    autocite=footnote
+]{biblatex}
+    \addbibresource{bibliography.bib}
+\usepackage{float}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsmath}
+    \numberwithin{equation}{section}
+\usepackage{amsthm}
+    \newtheorem{theorem}{Theorem}
+    \newtheorem*{definition}{Definition}
+\usepackage[
+    colorlinks,
+    linkcolor=black,
+    citecolor=black,
+    urlcolor=blue
+]{hyperref}
+\usepackage{mdframed}
+
+\setlength{\parskip}{1em}
+\setlength{\parindent}{0em}
+
+\let\oldsection\section
+\renewcommand\section{\clearpage\oldsection}
+
+\renewcommand{\geq}{\geqslant}
+\renewcommand{\Re}{\text{Re}}
+\renewcommand{\Im}{\text{Im}}
+\newcommand{\ahalf}{\frac{1}{2}}
+\newcommand{\piint}{\int_{-\pi}^{\pi}}
+
+\title{How can a tiny mp3 player store thousands of songs}
+\author{Michalis Pardalos}
+\date{}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{Introduction}
+\section{The Fourier Series}
+
+The Fourier Series is defined as a series of the form
+%
+\begin{equation} \label{eq:fourier}
+    f(t) = a_0 + \sum_{n=1}^{\infty}a_n \cos{nt} + \sum_{n=1}^{\infty}b_n \sin{nt}
+\end{equation}
+%
+where $a_n$, $b_n$ constants. 
+
+\subsection{Finding the coefficients} \label{sec:fourier_coefficients}
+
+Before explaining how the Fourier coefficients are found, it will help to state the
+following integral identities:\autocite[438]{courant_calculus_1}
+%
+\begin{align}
+    \piint \sin{nx}\ dx          & = 0 \label{eq:sinint}\\
+    \piint \cos{nx}\ dx          & = 0 \label{eq:cosint}\\
+    \piint \sin{nx}\cos{mx}\ dx & = 0\label{eq:sincosint}\\
+    \piint \cos{nx}\cos{mx}\ dx & =
+    \begin{cases}
+        0,   & m\not=n\\
+        \pi, & m=n
+    \end{cases} \label{eq:coscosint}\\
+    \piint \sin{nx}\sin{mx}\ dx &= 
+    \begin{cases}
+        0,   & m\not=n\\
+        \pi, & m=n\not=0
+    \end{cases} \label{eq:sinsinint}
+\end{align}
+%
+With these in mind, we can begin with finding some coefficients for the Fourier expansion of
+a function $f(t)$:
+%
+\begin{equation*}
+    f(t) = a_0 + \sum_{n=1}^\infty a_n \cos{nt} + \sum_{n=1}^{\infty} b_n \sin{nt}
+\end{equation*}
+%
+
+First we can find $a_0$ simply by integrating with respect to $t$ over $[-\pi, \pi]$:
+%
+\begin{equation*}
+    \piint f(t)\ dt = a_0\piint dt + \sum_{n=1}^\infty a_n \piint \cos{nt}\ dt 
+        + \sum_{n=1}^{\infty} b_n \piint \sin{nt}\ dt\\
+\end{equation*}
+%
+By equations \eqref{eq:sinint} and \eqref{eq:cosint}, this can be simplified to:
+%
+\begin{equation*}
+    \piint f(t)\ dt &= 2\pi a_0\\
+\end{equation*}
+%
+So, $a_0$ can be found as:
+%
+\begin{mdframed}
+    \begin{equation}
+        a_0 &= \frac{1}{2\pi}\piint f(t)\ dt
+    \end{equation}
+\end{mdframed}
+%
+
+Next, for $a_n$, say we want to find some $a_m$. Multiplying by $\cos{mt}$ and integrating
+with respect to $t$ over $[-\pi, \pi]$ gives us:
+%
+\begin{equation*}
+    \piint f(t)\cos{mt}\ dt =  a_0\piint \cos{mt}\ dt 
+        + \sum_{n=1}^\infty a_n \piint \cos{nt}\cos{mt}\ dt 
+        + \sum_{n=1}^{\infty} b_n \piint \sin{nt}\cos{mt}\ dt
+\end{equation*}
+%
+Using equations \eqref{eq:cosint}, \eqref{eq:sincosint} and \eqref{eq:coscosint} this is reduced to:
+%
+\begin{equation*}
+    \piint f(t)\cos{mt}\ dt = \pi a_m
+\end{equation*}
+%
+So, any given $a_m$ can be found as:
+%
+\begin{mdframed}
+    \begin{equation}
+        a_m = \frac{1}{\pi}\piint f(t)\cos{mt}\ dt
+    \end{equation}
+\end{mdframed}
+%
+
+Similarly, to find some $b_m$, $m > 0$, we can multiply $f(t)$ by $\sin{mt}$ and integrate
+with respect to $t$ over $[-\pi, \pi]$ to get:
+%
+\begin{equation*}
+    \piint f(t)\sin{mt}\ dt = a_0\piint \sin{mt}\ dt 
+        + \sum_{n=1}^\infty a_n \piint \cos{nt}\sin{mt}\ dt 
+        + b_n \piint \sin{nt}\sin{mt}\ dt
+\end{equation*}
+%
+Using equations \eqref{eq:sinint}, \eqref{eq:sincosint} and \eqref{eq:sinsinint}, we can see
+that
+%
+\begin{mdframed}
+    \begin{equation}
+        b_m = \frac{1}{\pi}\piint f(t)\sin{mt}\ dt
+    \end{equation}
+\end{mdframed}
+
+\subsection{Simplifying the Series using Euler's Formula}
+
+While the coefficients are relatively simple to find once someone has the formulas in
+\autoref{sec:fourier_coefficients}, it is often cumbersome to find 3 coefficients. We can
+simplify the series to use just one coefficient using Euler's Formula.
+
+Euler's Formula states that
+%
+\begin{equation} \label{eq:euler}
+    e^{ix} = \cos{x} + i\sin{x}
+\end{equation}
+%
+This can also be restated as 
+%
+\begin{equation} \label{eq:neg_euler}
+    e^{-ix} = \cos{x} - i\sin{x}
+\end{equation}
+%
+Adding or subtracting equations \eqref{eq:euler} and \eqref{eq:neg_euler} gives,
+respectively:
+%
+\begin{align*}
+    \cos{x} &= \frac{e^{ix} + e^{-ix}}{2} \label{eq:euler_cos}\\ 
+    \sin{x} &= \frac{e^{ix} - e^{-ix}}{2i} \label{eq:euler_sin}
+\end{align*}
+%
+
+Using these formulas, the Fourier series --- as stated in \autoref{eq:fourier}---
+becomes:
+%
+\begin{equation*}
+    f(t) &= a_0 + \sum_{n=1}^\infty a_n\frac{e^{int} + e^{-int}}{2} 
+            + \sum_{n=1}^\infty b_n \frac{e^{int} - e^{-int}}{2i} 
+\end{equation*}
+%
+It will make the calculations easier at this point to combine the sums. First, note that
+$\frac{e^{int}+e^{-int}}{2} = 1$ for $n=0$. $a_0$ can therefore be added into the first sum,
+by having it start from $n=0$. Also note that $\frac{e^{int}-e^{-int}}{2i} = 0$ for $n=0$,
+so starting the second sum from $0$ does not affect the series. We can therefore combine the
+series into a single sum.
+%
+\begin{align}
+    f(t) &= \sum_{n=0}^{\infty} a_n\frac{e^{int} + e^{-int}}{2} 
+            + b_n \frac{e^{int} - e^{-int}}{2i} \nonumber \\
+         &= \sum_{n=0}^\infty \frac{a_n}{2}e^{int} + \frac{a_n}{2} e^{-int} 
+            + \frac{b_n}{2i}e^{int} - \frac{b_n}{2i}e^{-int} \nonumber\\
+         &= \sum_{n=0}^\infty \frac{a_n}{2} e^{int} + \frac{a_n}{2} e^{-int} 
+            - \frac{b_n}{2} ie^{int} + \frac{b_n}{2} ie^{-int} \nonumber\\
+         &= \sum_{n=0}^\infty \ahalf(a_n - ib_n)e^{int} + \ahalf(a_n + ib_n)e^{-int}
+            \label{eq:complex_fourier_halfway}
+\end{align}
+%
+Notice, that the two coefficients $a_n + ib_n$ and $a_n - ib_n$ are conjugates of each
+other. We can, therefore, define a new constant $c_n$, to replace $a_n$ and $b_n$:
+\autocite{fourier_lecture}
+%
+\begin{equation*}
+    c_n = 
+    \begin{cases}
+        \ahalf \left(a_n - ib_n \right)        & n \geq 0\\
+        \ahalf \left(a_{|n|} + ib_{|n|}\right) & n < 0
+    \end{cases}
+\end{equation*}
+%
+With this definition, continuing from \eqref{eq:complex_fourier_halfway}, we can restate
+the series as:
+%
+\begin{equation} \label{eq:complex_fourier}
+    f(t) = \sum_{n=-\infty}^{\infty}c_n e^{int}
+\end{equation}
+%
+In this form, the series is referred to as the \emph{complex Fourier series}.
+
+We can substitute the formulas for $a_n$ and $b_n$ into the cases for $c_n$ to obtain a
+singular formula for it. Let us begin with the case of $n \geq 0$
+%
+\begin{align}
+    c_n &= \ahalf(a_n - ib_n) \nonumber \\
+        &= \ahalf \left(\frac{1}{\pi} \piint f(t)\cos{nt}\ dt 
+            - i\frac{1}{\pi}\piint f(t)\sin{nt}\ dt \right) \nonumber \\
+        &= \frac{1}{2\pi}\piint f(t) (\cos{nt} - i\sin{nt})\ dt \nonumber \\
+        &= \frac{1}{2\pi}\piint f(t) e^{-int}\ dt \label{eq:c_n_pos_euler}
+\end{align}
+%
+
+Similarly, for $n < 0$:
+%
+\begin{align}
+    c_n &= \ahalf(a_{|n|} + ib_{|n|}) \nonumber \\
+        &= \ahalf \left(\frac{1}{\pi} \piint f(t)\cos{|n|t}\ dt 
+            + i\frac{1}{\pi}\piint f(t)\sin{|n|t}\ dt \right) \nonumber \\
+        &= \frac{1}{2\pi}\piint f(t) (\cos{|n|t} + i\sin{|n|t})\ dt \nonumber \\
+        &= \frac{1}{2\pi}\piint f(t) e^{i|n|t}\ dt \nonumber \\
+        &= \frac{1}{2\pi}\piint f(t) e^{-int}\ dt & \text{Since }n<0 \label{eq:c_n_neg_euler}
+\end{align}
+%
+Since the formulas \eqref{eq:c_n_pos_euler} and \eqref{eq:c_n_neg_euler} are the same, we
+can say for all $n \in \mathbb{Z}$:
+\begin{mdframed}
+    \begin{equation*}
+        c_n = \frac{1}{2\pi}\piint f(t) e^{-int}\ dt
+    \end{equation*}
+\end{mdframed}
+
+
+\section{The Fourier Transform}
+\section{The Discrete Fourier Transform}
+\section{The Fourier Transform in mp3 compression}
+
+\printbibliography
+\end{document}
