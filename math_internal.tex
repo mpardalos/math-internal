@@ -1,4 +1,4 @@
-\documentclass[12pt, titlepage]{article}
+\documentclass [12pt, titlepage]{article}
 
 \usepackage[margin=1in]{geometry}
 \usepackage[all]{nowidow}
@@ -21,7 +21,12 @@
     citecolor=black,
     urlcolor=blue
 ]{hyperref}
+\usepackage{graphicx}
+    \graphicspath{{media/}} 
 \usepackage{mdframed}
+\usepackage{pgfplots}
+\usepackage{caption}
+\usepackage{nicefrac}
 
 \setlength{\parskip}{1em}
 \setlength{\parindent}{0em}
@@ -256,8 +261,97 @@ can say for all $n \in \mathbb{Z}$:
 
 
 \section{The Fourier Transform}
+
+The Fourier Transform is the extension of the Fourier Series for functions defined in all of
+$-\infty < x < \infty$, and for non-integer frequencies of sinusoids. There are two
+operations related to the Fourier Transform: The Forward Fourier Transform and the Inverse
+Fourier Transform. The former is analogous to $c_n$ for the Fourier Series, giving the
+amplitude of the sinusoid of frequency $u$ in $f$, with the difference being, that $u$ can
+take non-integer values, contrary to $n$ which is a discrete variable. In relation to the
+Fourier Series, the Fourier Transform can be thought of as its limit as the period of the
+function being approximated approaches infinity.  \autocite{wolfram_fourier_transform} 
+
+The Fourier Transform of a function can be thought of as an alternative represantation of
+a function. It holds the exact same information as the the original function, but presents
+it in a different way, which is often more useful than the original representation. If a
+function is thought of as a signal that varies over time, then its Fourier Transform is a
+representation of the base frequencies that make it up, 
+
+The formulas for the Fourier Transform and its inverse can be seen below:
+%
+\begin{align*}
+    F(u) &= \infint f(t)e^{-2\pi itu}\ dt && \text{(Forward Fourier Transform)}\\[1em]
+    f(t) &= \infint F(u)e^{2\pi itu}\ du && \text{(Inverse Fourier Transform)}
+\end{align*}
+%
+
+As an example, here is the Fourier Transform for a square pulse, a function which has a
+constant value between two bounds, and is zero everywhere else, i.e.
+%
+\begin{equation*}
+    f(x) = \begin{cases}
+        A &a < x < b\\
+        0 &\text{otherwise}
+    \end{cases}:\ A,a,b \in \mathbb{R}
+\end{equation*}
+%
+For the example, I will use a square pulse from $-\pi$ to $\pi$ of height 2
+(\autoref{fig:square_pulse}).
+%
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.5\textwidth]{square_pulse}
+    \caption{}
+    \label{fig:square_pulse}
+\end{figure}
+%
+Taking its Fourier Transform:
+%
+\begin{equation*}
+    F(u) =  \infint f(t) e^{-2\pi itu}\ dt
+\end{equation*}
+%
+It becomes clear that the only interval that matters is $[-\pi, \pi]$. So the integral
+becomes:
+%
+\begin{equation*}
+    F(t) = \piint f(t)e^{-2\pi itu}\ dt
+\end{equation*}
+%
+But, $f(t)$ has a constant value of $2$ in that interval. So, again, the integral is
+simplified to:
+%
+\begin{equation*}
+    F(t) &= 2 \piint e^{-2\pi itu}\ dt
+\end{equation*}
+%
+Then, it is simply a matter of finding the antiderivative and integrating:
+%
+\begingroup
+\addtolength{\jot}{1em}
+\begin{align*}
+    F(u) &= \frac{2}{-2\pi iu} \piint -2\pi iue^{-2\pi itu}\ dt \\
+         &= \frac{1}{-\pi iu} \left[e^{-2\pi itu}\right]_{-\pi}^{\pi}\\
+         &= \frac{e^{-i2\pi^{2}u} - e^{i2\pi^{2}u}}{-\pi iu}\\
+         &= \frac{-2i\sin{(2\pi^{2}u)}}{-\pi iu}\\
+         &= \frac{2\sin{(2\pi^{2}u)}}{\pi u}
+\end{align*}
+\endgroup
+%
+
+\autoref{fig:ft_of_square_pulse} shows the plot of this function.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.5\textwidth]{ft_of_square_pulse}
+    \caption{}
+    \label{fig:ft_of_square_pulse}
+\end{figure}
+
+
 \section{The Discrete Fourier Transform}
 \section{The Fourier Transform in mp3 compression}
+
+
 
 \printbibliography
 \end{document}
