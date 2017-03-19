@@ -349,6 +349,39 @@ Then, it is simply a matter of finding the antiderivative and integrating:
 
 
 \section{The Discrete Fourier Transform}
+
+The Fourier Transform is extremely useful and has a variety of applications, but it comes
+with a crucial limitation: it requires a well-defined, smooth function.
+\autocite[319]{courant_calculus_2} In real world applications, however, it is often the case
+that one has to obtain the Fourier Transform for a function which is only defined as a set
+of points. This means that it is impossible to obtain the Fourier Transform using its
+integral formula ($F(u) = \infint f(t) e^{-2\pi itu}\ dt$). 
+
+In this case, the \emph{Discrete Fourier Transform} --- or DFT --- is used. The DFT provides
+the base frequencies for a discrete set of data. 
+
+For a discrete set of $N$ points labelled $f_k$ where $k \in \mathbb{Z}$ and $k \in [0,
+N-1]$, the DFT can be obtained by considering a function $f(k)$ which has an area of $f_k$
+where $k \in \mathbb{Z}$ and $k \in [0, N-1]$, and 0 everywhere else. Then, the Fourier
+Transform Integral can be computed as a sum. Since there is only $N$, discrete, inputs to the
+transform, only $N$, discrete, outputs will be meaningful. So, for $n \in [0, N-1]$, the
+Fourier Transform of $f_k$ is:
+%
+\begin{equation}
+    F_n = \sum_{k=0}^{N-1} f_k e^{-2\pi ikn / N}
+\end{equation}
+%
+Similarly, the Inverse Fourier Transform is:
+%
+\begin{equation}
+    f_k = \frac{1}{N} \sum_{n=0}^{N-1} F_n e^{2\pi ikn / N}
+\end{equation}
+%
+
+The Discrete Fourier Transform is also especially practical because of an extremely
+efficient algorithm for computing it appropriatelly called the \emph{Fast Fourier Transform}
+--- or \emph{FFT} --- 
+    
 \section{The Fourier Transform in mp3 compression}
 
 
