@@ -65,7 +65,7 @@ where $a_n$, $b_n$ constants.
 \subsection{Finding the coefficients} \label{sec:fourier_coefficients}
 
 Before explaining how the Fourier coefficients are found, it will help to state the
-following integral identities:\autocite[438]{courant_calculus_1}
+following integral identities\autocite[438]{courant_calculus_1}.
 %
 \begin{align}
     \piint \sin{nx}\ dx          & = 0 \label{eq:sinint}\\
@@ -84,7 +84,9 @@ following integral identities:\autocite[438]{courant_calculus_1}
 \end{align}
 %
 With these in mind, we can begin with finding some coefficients for the Fourier expansion of
-a function $f(t)$:
+a function $f(t)$. It is assumed \textbf{that the period of $f(t)$ is
+$2\pi$ and that it is symmetric about $x=0$}, this means that the interval $[-\pi, \pi]$,
+covers exactly one complete period of $f(t)$:
 %
 \begin{equation*}
     f(t) = a_0 + \sum_{n=1}^\infty a_n \cos{nt} + \sum_{n=1}^{\infty} b_n \sin{nt}
