@@ -384,9 +384,38 @@ The Discrete Fourier Transform is also especially practical because of an extrem
 efficient algorithm for computing it appropriatelly called the \emph{Fast Fourier Transform}
 --- or \emph{FFT} --- 
     
-\section{The Fourier Transform in mp3 compression}
+\section{The Fourier Transform in MP3 compression}
 
+MPEG-1 layer 3, better known as MP3, is the most widely used standard for electronically
+encoding audio. It has achieved this level of popularity mainly because of the very small
+size of the files that are produced when audio is encoded using it. This is largely due to
+its use of the (Discrete) Fourier Transform. \autocite{mp3_paper}
 
+The first step of the algorithm is breaking up the audio into so called frames. The
+compression algorithm is applied to each frame separately.
+
+Because MP3 belongs to a family of compression algorithms called \emph{lossy} compression
+algorithms, which do not retain all input data. They ignore data that can be removed with
+small effects on the output. In the case of MP3 --- and lossy audio compression in general
+--- this means removing certain frequencies from the audio. 
+
+A Discrete Fourier Transform is first applied to the audio. The number of samples used for
+it depends on the \emph{bitrate} chosen for the encoding. Bitrate is the measure of how many
+bytes of data are used for each second of the audio, and can have a value of up to 320
+kilobytes per second in MP3. The DFT gives the base frequencies present in the frame. Then
+the \emph{psychoacoustic model} is applied on the data. This model is a way of determining
+frequencies that will least affect the experience of the listener. The first, most obvious
+step is removing frequencies that are completely inaudible to the human ear, namely anything
+under 20Hz or over 20kHz. The most important optimization, however, relies on the fact that
+frequencies close to another, very strong one are \emph{"masked"}, meaning that their impact
+is lessened. The strength of this masking effect is smoothly reduced as frequencies get
+further away from the very strong frequency. This effect is used by creating a cutoff
+threshold around the very strong frequencies. Frequencies below the threshold value are
+not included in the final file. 
+
+The MP3 standard includes a number of other parts and ways of reducing file size. The
+primary part of the encoding is still the psychoacoustic model however, and so other parts
+of the encoding are outside the scope of the investigation.
 
 \printbibliography
 \end{document}
